@@ -1,0 +1,122 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>38 Days Until I See You ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(#fff0f5, #ffe4e1);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #d6336c;
+      margin-bottom: 0.5rem;
+    }
+    #countdown {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .progress {
+      width: 80%;
+      background: #f8d7da;
+      border-radius: 50px;
+      height: 18px;
+      overflow: hidden;
+      margin: 1rem auto 2rem;
+    }
+    .progress-bar {
+      height: 100%;
+      background: repeating-linear-gradient(90deg, #ff4d88 0 10px, #fff0f5 10px 20px);
+      transition: width 0.5s ease-in-out;
+    }
+    .day {
+      border: 1px solid #ffc1cc;
+      border-radius: 1rem;
+      padding: 1rem;
+      margin: 1rem 0;
+      width: 100%;
+      max-width: 500px;
+      background: white;
+    }
+    .locked {
+      opacity: 0.3;
+      text-align: center;
+    }
+    .unlocked p {
+      margin: 0.3rem 0;
+    }
+    .final {
+      margin-top: 3rem;
+      padding: 1rem;
+      background: #ffe4e1;
+      border-radius: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>38 Days Until I See You ❤️</h1>
+  <div id="countdown"></div>
+  <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
+  <div id="days"></div>
+  <div id="final" class="final">
+    <h2>💌 The Letter</h2>
+    <p>I waited 38 days to say this. You are my heart, my home, my forever. I love you more than I can ever fit into one countdown.</p>
+    <!-- <video controls src="your_video.mp4"></video> -->
+  </div>
+
+  <script>
+    const totalDays = 38;
+    const launchDate = new Date(); // today
+    const today = new Date();
+    const daysSince = Math.floor((today - launchDate) / (1000 * 60 * 60 * 24));
+    const daysRemaining = totalDays - daysSince;
+    const countdownEl = document.getElementById("countdown");
+    const daysContainer = document.getElementById("days");
+    const progressBar = document.getElementById("progress-bar");
+    const finalEl = document.getElementById("final");
+
+    const data = Array.from({ length: totalDays }, (_, i) => ({
+      sentence: `Day ${i + 1}: You were the best part of my day.`,
+      memory: `Memory ${i + 1}: The way you looked at me that night.`,
+      reason: `Reason ${i + 1}: You make my world feel calm.`,
+    }));
+
+    countdownEl.innerText = `${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} left`;
+
+    progressBar.style.width = `${(daysSince / totalDays) * 100}%`;
+
+    data.forEach((entry, i) => {
+      const dayDiv = document.createElement("div");
+      dayDiv.classList.add("day");
+
+      if (i <= daysSince) {
+        dayDiv.classList.add("unlocked");
+        dayDiv.innerHTML = `
+          <p><strong>Sentence:</strong> ${entry.sentence}</p>
+          <p><strong>Memory:</strong> ${entry.memory}</p>
+          <p><strong>Reason:</strong> ${entry.reason}</p>
+        `;
+      } else {
+        dayDiv.classList.add("locked");
+        dayDiv.innerHTML = `<p>🔒 Day ${i + 1} — Locked</p>`;
+      }
+
+      daysContainer.appendChild(dayDiv);
+    });
+
+    if (daysSince >= totalDays) {
+      finalEl.style.display = "block";
+    }
+  </script>
+</body>
+</html>
