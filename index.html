@@ -1,122 +1,217 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>38 Days Until I See You ❤️</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuteness Evaluation Form</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Georgia', serif;
-      background: linear-gradient(#fff0f5, #ffe4e1);
-      color: #333;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(#ffe4f0, #fff0f5);
+      color: #444;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       padding: 2rem;
+      min-height: 100vh;
+      transition: background 0.5s ease-in-out;
+      cursor: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') 16 16, auto;
     }
-    h1 {
-      font-size: 2rem;
-      color: #d6336c;
-      margin-bottom: 0.5rem;
+    .card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      position: relative;
     }
-    #countdown {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
+    .card h2 {
+      color: #ff69b4;
+      margin-bottom: 1rem;
     }
-    .progress {
-      width: 80%;
-      background: #f8d7da;
-      border-radius: 50px;
-      height: 18px;
+    .options button {
+      background: #ffb6c1;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+    .options button:hover {
+      transform: scale(1.05);
+    }
+    #final-screen {
+      display: none;
+    }
+    #love-letter {
+      display: none;
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: #ffe4e1;
+      border-radius: 1rem;
+      font-style: italic;
+    }
+    .progress-container {
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 1rem;
+      background: #ffe4ec;
+      border-radius: 30px;
       overflow: hidden;
-      margin: 1rem auto 2rem;
+      height: 20px;
     }
     .progress-bar {
       height: 100%;
-      background: repeating-linear-gradient(90deg, #ff4d88 0 10px, #fff0f5 10px 20px);
-      transition: width 0.5s ease-in-out;
+      width: 0%;
+      background: repeating-linear-gradient(45deg, #ff69b4, #ff69b4 10px, #fff0f5 10px, #fff0f5 20px);
+      transition: width 0.3s ease;
     }
-    .day {
-      border: 1px solid #ffc1cc;
-      border-radius: 1rem;
-      padding: 1rem;
-      margin: 1rem 0;
-      width: 100%;
-      max-width: 500px;
-      background: white;
+    ul {
+      text-align: left;
+      padding: 0;
+      list-style: none;
     }
-    .locked {
-      opacity: 0.3;
-      text-align: center;
-    }
-    .unlocked p {
-      margin: 0.3rem 0;
-    }
-    .final {
-      margin-top: 3rem;
-      padding: 1rem;
-      background: #ffe4e1;
-      border-radius: 1rem;
-      display: none;
+    ul li::before {
+      content: '❤️ ';
+      margin-right: 0.5rem;
     }
   </style>
 </head>
 <body>
-  <h1>38 Days Until I See You ❤️</h1>
-  <div id="countdown"></div>
-  <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
-  <div id="days"></div>
-  <div id="final" class="final">
-    <h2>💌 The Letter</h2>
-    <p>I waited 38 days to say this. You are my heart, my home, my forever. I love you more than I can ever fit into one countdown.</p>
-    <!-- <video controls src="your_video.mp4"></video> -->
+  <div class="card" id="question-card">
+    <div class="progress-container">
+      <div class="progress-bar" id="progress"></div>
+    </div>
+    <h2 id="question"></h2>
+    <div class="options" id="options"></div>
+  </div>
+
+  <div class="card" id="final-screen">
+    <h2>🎉 You passed with MAXIMUM cuteness!</h2>
+    <p>You are now officially certified to be my Valentine. 💖</p>
+    <p><strong>Your Answers:</strong></p>
+    <ul id="answer-list"></ul>
+    <p style="font-size:1.2rem; margin-top: 1rem;">Cuteness Level: <strong>💯 100%</strong></p>
+    <button onclick="document.getElementById('love-letter').style.display='block'">Okay but seriously...</button>
+    <div id="love-letter">
+      Dear Delia,
+      <br><br>
+      I just wanted to say I truly love you. I see you working really hard, and I am here to support you through it all. 
+      You are my one and only, my beautiful girl who makes my life full. I try my best to love you with all and more because you deserve it all. 
+      You are my real princess, and I want all that's best for you. I'm rooting for you, and I am really proud of you. 
+      I love you.
+      Your husband, 
+      Yuder
+      <br><br>
+      ❤️
+    </div>
   </div>
 
   <script>
-    const totalDays = 38;
-    const launchDate = new Date(); // today
-    const today = new Date();
-    const daysSince = Math.floor((today - launchDate) / (1000 * 60 * 60 * 24));
-    const daysRemaining = totalDays - daysSince;
-    const countdownEl = document.getElementById("countdown");
-    const daysContainer = document.getElementById("days");
-    const progressBar = document.getElementById("progress-bar");
-    const finalEl = document.getElementById("final");
-
-    const data = Array.from({ length: totalDays }, (_, i) => ({
-      sentence: `Day ${i + 1}: You were the best part of my day.`,
-      memory: `Memory ${i + 1}: The way you looked at me that night.`,
-      reason: `Reason ${i + 1}: You make my world feel calm.`,
-    }));
-
-    countdownEl.innerText = `${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} left`;
-
-    progressBar.style.width = `${(daysSince / totalDays) * 100}%`;
-
-    data.forEach((entry, i) => {
-      const dayDiv = document.createElement("div");
-      dayDiv.classList.add("day");
-
-      if (i <= daysSince) {
-        dayDiv.classList.add("unlocked");
-        dayDiv.innerHTML = `
-          <p><strong>Sentence:</strong> ${entry.sentence}</p>
-          <p><strong>Memory:</strong> ${entry.memory}</p>
-          <p><strong>Reason:</strong> ${entry.reason}</p>
-        `;
-      } else {
-        dayDiv.classList.add("locked");
-        dayDiv.innerHTML = `<p>🔒 Day ${i + 1} — Locked</p>`;
+    const questions = [
+      {
+        q: "Are you aware of how cute you are?",
+        a: ["No", "I’ve heard rumors", "Yes"]
+      },
+      {
+        q: "What is your primary source of cuteness?",
+        a: ["Genetics", "Black magic", "It just happens. I don’t control it."]
+      },
+      {
+        q: "What sound does your laugh make people do?",
+        a: ["Smile", "Forget their problems", "Fall in love accidentally"]
+      },
+      {
+        q: "How would you rate your ability to turn heads in a room?",
+        a: ["3/10", "7/10", "11/10, respectfully"]
+      },
+      {
+        q: "How do you handle compliments like: ‘You’re literally the cutest person alive’?",
+        a: ["Deny it (while blushing)", "Accept it like royalty", "Say ‘stop’ but hope they keep going"]
+      },
+      {
+        q: "Preferred method of emotional destruction?",
+        a: ["One soft smile", "Eyelash blink with eye contact", "Saying ‘hiiii’ with extra i’s"]
+      },
+      {
+        q: "What vibe do you give off in public?",
+        a: ["Minding my business", "Accidentally cute", "Someone’s thinking about me right now."]
+      },
+      {
+        q: "Select all that apply:",
+        a: ["I’ve made someone speechless today", "I’ve improved the room’s vibe", "I look cute even when confused"]
+      },
+      {
+        q: "If someone gave you a forehead kiss right now, what would happen?",
+        a: ["You’d melt", "You’d act surprised like it wasn’t your plan", "You’d say ‘stopppp’ but lean in again"]
+      },
+      {
+        q: "Final answer: Do you want to be my Valentine?",
+        a: ["Yes", "Say it again but cuter", "No"]
       }
+    ];
 
-      daysContainer.appendChild(dayDiv);
-    });
+    let current = 0;
+    const answers = [];
 
-    if (daysSince >= totalDays) {
-      finalEl.style.display = "block";
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const card = document.getElementById("question-card");
+    const finalScreen = document.getElementById("final-screen");
+    const answerList = document.getElementById("answer-list");
+    const progressBar = document.getElementById("progress");
+
+    function showQuestion(index) {
+      const q = questions[index];
+      questionEl.innerText = q.q;
+      optionsEl.innerHTML = '';
+      progressBar.style.width = `${(index / questions.length) * 100}%`;
+
+      q.a.forEach(answer => {
+        const btn = document.createElement("button");
+        btn.textContent = answer;
+
+        // Add mouse dodging to "No" button
+        if (q.q.includes("Valentine") && answer.toLowerCase().includes("no")) {
+          btn.onmouseover = () => {
+            btn.style.position = 'absolute';
+            btn.style.left = Math.random() * 70 + '%';
+            btn.style.top = Math.random() * 70 + '%';
+          };
+        }
+
+        btn.onclick = () => {
+          answers.push({ question: q.q, answer });
+          current++;
+          if (current < questions.length) {
+            showQuestion(current);
+          } else {
+            showFinal();
+          }
+        };
+
+        optionsEl.appendChild(btn);
+      });
     }
+
+    function showFinal() {
+      card.style.display = "none";
+      finalScreen.style.display = "block";
+      progressBar.style.width = "100%";
+      answers.forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = `${entry.question} → ${entry.answer}`;
+        answerList.appendChild(li);
+      });
+    }
+
+    showQuestion(current);
   </script>
 </body>
 </html>
