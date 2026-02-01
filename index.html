@@ -9,13 +9,8 @@
       font-family: 'Comic Sans MS', cursive, sans-serif;
       background: linear-gradient(#ffe4f0, #fff0f5);
       color: #444;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      min-height: 100vh;
-      transition: background 0.5s ease-in-out;
+      overflow: hidden;
+      margin: 0;
       cursor: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') 16 16, auto;
     }
     .card {
@@ -27,6 +22,14 @@
       width: 100%;
       text-align: center;
       position: relative;
+      margin: 3rem auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .card.show {
+      opacity: 1;
+      transform: translateY(0);
     }
     .card h2 {
       color: #ff69b4;
@@ -60,7 +63,7 @@
     .progress-container {
       width: 100%;
       max-width: 500px;
-      margin-bottom: 1rem;
+      margin: 1rem auto;
       background: #ffe4ec;
       border-radius: 30px;
       overflow: hidden;
@@ -81,9 +84,39 @@
       content: '❤️ ';
       margin-right: 0.5rem;
     }
+    .heart {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: red;
+      transform: rotate(45deg);
+      animation: floatUp 8s infinite ease-in;
+      opacity: 0.3;
+    }
+    .heart::before, .heart::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: red;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -7px;
+      left: 0;
+    }
+    .heart::after {
+      left: -7px;
+      top: 0;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(1); }
+      100% { transform: translateY(-10vh) scale(1.2); }
+    }
   </style>
 </head>
 <body>
+  <div id="bg-hearts"></div>
   <div class="card" id="question-card">
     <div class="progress-container">
       <div class="progress-bar" id="progress"></div>
@@ -100,14 +133,14 @@
     <p style="font-size:1.2rem; margin-top: 1rem;">Cuteness Level: <strong>💯 100%</strong></p>
     <button onclick="document.getElementById('love-letter').style.display='block'">Okay but seriously...</button>
     <div id="love-letter">
-      Dear Delia,
+      Dear my love,
       <br><br>
-      I just wanted to say I truly love you. I see you working really hard, and I am here to support you through it all. 
-      You are my one and only, my beautiful girl who makes my life full. I try my best to love you with all and more because you deserve it all. 
-      You are my real princess, and I want all that's best for you. I'm rooting for you, and I am really proud of you. 
-      I love you.
-      Your husband, 
-      Yuder
+Hey princess, just wanted to say I am extremely proud of you. I love the work you've been doing with photography lately, 
+      and how everything is working out. I am rooting for you, and I am your biggest fan. I'm here every step of the way.
+      I wanted to make you smile today, so I've created this for you. I really want you to know I love you and I'm always thinking of you.
+      You are my special, pretty princess, my cute, cuddly princess. Can't wait to have you in my arms. 38 DAYS LEFT!
+      I LOVE YOU!
+      
       <br><br>
       ❤️
     </div>
@@ -115,69 +148,39 @@
 
   <script>
     const questions = [
-      {
-        q: "Are you aware of how cute you are?",
-        a: ["No", "I’ve heard rumors", "Yes"]
-      },
-      {
-        q: "What is your primary source of cuteness?",
-        a: ["Genetics", "Black magic", "It just happens. I don’t control it."]
-      },
-      {
-        q: "What sound does your laugh make people do?",
-        a: ["Smile", "Forget their problems", "Fall in love accidentally"]
-      },
-      {
-        q: "How would you rate your ability to turn heads in a room?",
-        a: ["3/10", "7/10", "11/10, respectfully"]
-      },
-      {
-        q: "How do you handle compliments like: ‘You’re literally the cutest person alive’?",
-        a: ["Deny it (while blushing)", "Accept it like royalty", "Say ‘stop’ but hope they keep going"]
-      },
-      {
-        q: "Preferred method of emotional destruction?",
-        a: ["One soft smile", "Eyelash blink with eye contact", "Saying ‘hiiii’ with extra i’s"]
-      },
-      {
-        q: "What vibe do you give off in public?",
-        a: ["Minding my business", "Accidentally cute", "Someone’s thinking about me right now."]
-      },
-      {
-        q: "Select all that apply:",
-        a: ["I’ve made someone speechless today", "I’ve improved the room’s vibe", "I look cute even when confused"]
-      },
-      {
-        q: "If someone gave you a forehead kiss right now, what would happen?",
-        a: ["You’d melt", "You’d act surprised like it wasn’t your plan", "You’d say ‘stopppp’ but lean in again"]
-      },
-      {
-        q: "Final answer: Do you want to be my Valentine?",
-        a: ["Yes", "Say it again but cuter", "No"]
-      }
+      { q: "Are you aware of how cute you are?", a: ["No", "I’ve heard rumors", "Yes"] },
+      { q: "What is your primary source of cuteness?", a: ["Genetics", "Black magic", "It just happens. I don’t control it."] },
+      { q: "What does your laugh make people do?", a: ["Smile", "Forget their problems", "Fall in love accidentally"] },
+      { q: "How would you rate your ability to turn heads in a room?", a: ["3/10", "6-7/10", "11/10, respectfully"] },
+      { q: "How do you handle compliments like: ‘You’re literally the cutest person alive’?", a: ["Deny it (while blushing)", "Accept it like royalty", "Say ‘stop’ but hope they keep going"] },
+      { q: "On a scale from cute to extremely cute, where do you land?", a: ["This a rethorical question?", "Obviously extremely cute", "Be for real."] },
+      { q: "What vibe do you give off in public?", a: ["Minding my business", "Accidentally cute", "Someone’s thinking about me right now."] },
+      { q: "Select all that apply:", a: ["I’ve made someone speechless today", "I’ve improved the room’s vibe", "I look cute even when confused"] },
+      { q: "If someone gave you a forehead kiss right now, what would happen?", a: ["You’d melt", "You’d act surprised like it wasn’t your plan", "You’d say ‘stopppp’ but lean in again"] },
+      { q: "Final answer: Do you want to be my Valentine?", a: ["Yes", "Say it again but cuter", "No"] }
     ];
 
     let current = 0;
     const answers = [];
-
     const questionEl = document.getElementById("question");
     const optionsEl = document.getElementById("options");
     const card = document.getElementById("question-card");
     const finalScreen = document.getElementById("final-screen");
     const answerList = document.getElementById("answer-list");
     const progressBar = document.getElementById("progress");
+    const clickSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_40482d2e03.mp3");
 
     function showQuestion(index) {
       const q = questions[index];
       questionEl.innerText = q.q;
       optionsEl.innerHTML = '';
       progressBar.style.width = `${(index / questions.length) * 100}%`;
+      card.classList.remove("show");
+      setTimeout(() => card.classList.add("show"), 100);
 
       q.a.forEach(answer => {
         const btn = document.createElement("button");
         btn.textContent = answer;
-
-        // Add mouse dodging to "No" button
         if (q.q.includes("Valentine") && answer.toLowerCase().includes("no")) {
           btn.onmouseover = () => {
             btn.style.position = 'absolute';
@@ -185,8 +188,8 @@
             btn.style.top = Math.random() * 70 + '%';
           };
         }
-
         btn.onclick = () => {
+          clickSound.play();
           answers.push({ question: q.q, answer });
           current++;
           if (current < questions.length) {
@@ -195,7 +198,6 @@
             showFinal();
           }
         };
-
         optionsEl.appendChild(btn);
       });
     }
@@ -203,14 +205,43 @@
     function showFinal() {
       card.style.display = "none";
       finalScreen.style.display = "block";
+      finalScreen.classList.add("show");
       progressBar.style.width = "100%";
       answers.forEach(entry => {
         const li = document.createElement("li");
         li.textContent = `${entry.question} → ${entry.answer}`;
         answerList.appendChild(li);
       });
+      launchConfetti();
     }
 
+    function launchConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "heart";
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.top = Math.random() * 100 + "vh";
+        confetti.style.animationDuration = (Math.random() * 3 + 5) + "s";
+        confetti.style.opacity = Math.random();
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 10000);
+      }
+    }
+
+    function spawnBackgroundHearts() {
+      const bg = document.getElementById("bg-hearts");
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.top = 100 + i * 50 + "px";
+        heart.style.animationDelay = (Math.random() * 5) + "s";
+        heart.style.animationDuration = (Math.random() * 5 + 10) + "s";
+        bg.appendChild(heart);
+      }
+    }
+
+    spawnBackgroundHearts();
     showQuestion(current);
   </script>
 </body>
